@@ -1,4 +1,28 @@
-const commentFormHandler = async (event) => {
+async function commentForm(event) {
+    event.preventDefault();
+
+    const comment = document.querySelector('textarea[name="comment"]').value.trim();
+
+    if (comment) {
+        const response = await fetch('/api/comment', {
+            method: 'POST',
+            body: JSON.stringify({
+                body,
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            document.location.reload();
+        } else {
+            alert(response.statusText);
+        }
+    }
+}
+
+/* const commentFormHandler = async (event) => {
     event.preventDefault();
 
     const comment_content = document.querySelector('#comment-desc').nodeValue.trim();
@@ -34,11 +58,7 @@ const delButtonHandler = async (event) => {
         }
     }
 };
-
+*/
 document    
-        .querySelector('.new-comment-form')
-        .addEventListener('submit', commentFormHandler);
-
-document   
-        .querySelector('.delete-comment-form')
-        .addEventListener('click', delButtonHandler);
+        .querySelector('.btn')
+        .addEventListener('submit', commentForm);
