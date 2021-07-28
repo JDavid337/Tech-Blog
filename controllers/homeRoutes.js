@@ -1,10 +1,11 @@
 const router = require('express').Router();
-const { User } = require('../models');
-const withAuth = require('../utils/auth');
+const { User, Post, Comment } = require('../models');
 
-router.get('/', withAuth, async (req, res) => {
+
+router.get('/', async (req, res) => {
     try {
-    const postData = await Post.findAll({
+        const postData = await Post.findAll({
+            include: [User],
 /*        include: [
             {
                 model: User,
@@ -26,16 +27,35 @@ console.log(userData)
 });
 
 
-router.get('/posts', withAuth, async (req, res) => {
+router.get('/post/:id', async (req, res) => {
     try {
  //   const userData = await User.findAll({})
-res.render("posts")
-    } catch(err){
-        res.json(err)
-    }
-    })
-router.get('/signup', (req, res) => {
+        const postData = await Post.findByPk(req.params.id, {
+            include: [
+                User,
+                {
+                    model: Comment,
+                    include: [User]
+                },
+            ],
+        });
 
+const post = postData.get({ plain: true });
+
+res.render("post", {
+    ...post,
+    logged_in: req.session.logged_in
+});
+    } catch(err){
+        res.status(500).json(err);
+    }
+    });
+
+router.get('/signup', (req, res) => {
+    if(req.session.logged_in) {
+        res.redirect('/');
+    return;
+    }
     res.render('signup');
 });
 
