@@ -39,4 +39,4 @@ router.get('/edit/:id', withAuth, async(req, res) => {
 .catch(err => {res.status(500).json(err)
 })
 });
-modeule.exports = router;
+module.exports = router;

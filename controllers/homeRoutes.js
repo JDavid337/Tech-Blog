@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
         order: [['name', 'ASC']],
     }]*/
     });
-console.log(userData)
+console.log(postData)
     const posts = postData.map((project) => project.get({ plain: true }));
 
     res.render('homepage', {
